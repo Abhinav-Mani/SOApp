@@ -5,6 +5,8 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.Toast;
 
@@ -19,13 +21,14 @@ import com.maxpetroleum.soapp.R;
 
 import java.util.HashMap;
 
-public class PoList extends AppCompatActivity implements PoListAdapter.ClickHandler {
+public class PoList extends AppCompatActivity implements PoListAdapter.ClickHandler, View.OnClickListener {
 
     ViewPager viewPager;
     ViewPagerAddapter addapter;
     TabLayout tabLayout;
     public static Dealer dealer;
     public static HashMap<String,String> hashMap;
+    ImageView back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +56,10 @@ public class PoList extends AppCompatActivity implements PoListAdapter.ClickHand
         viewPager.setAdapter(addapter);
         tabLayout=findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
+        back = findViewById(R.id.back);
 
         hashMap=new HashMap<>();
+        back.setOnClickListener(this);
 
     }
 
@@ -64,5 +69,10 @@ public class PoList extends AppCompatActivity implements PoListAdapter.ClickHand
         intent.putExtra("Key",hashMap.get(po_info.getPo_no()));
         intent.putExtra("Data",po_info);
         startActivity(intent);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v == back) finish();
     }
 }

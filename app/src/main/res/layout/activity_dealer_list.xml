@@ -1,12 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activity.DealerList">
+   <RelativeLayout
+       android:layout_width="match_parent"
+       android:layout_height="?attr/actionBarSize"
+       android:id="@+id/topbar"
+       android:background="@color/colorPrimary">
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="match_parent"
+          android:text="Dealers"
+          android:id="@+id/title"
+          android:textSize="20sp"
+          android:textStyle="bold"
+          android:textColor="@android:color/white"
+          android:gravity="center"
+          android:layout_toEndOf="@+id/back"/>
+      <ImageView
+          android:layout_width="54dp"
+          android:layout_height="match_parent"
+          android:padding="16dp"
+          android:src="@drawable/ic_back"
+          android:id="@+id/back"/>
+
+   </RelativeLayout>
    <androidx.recyclerview.widget.RecyclerView
        android:layout_width="match_parent"
        android:layout_height="match_parent"
-       android:id="@+id/dealerList"/>
-</LinearLayout>
+       android:id="@+id/dealerList"
+       android:layout_below="@id/topbar"/>
+</RelativeLayout>

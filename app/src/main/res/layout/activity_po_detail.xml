@@ -5,12 +5,37 @@
     android:layout_height="match_parent"
     tools:context=".Activity.PoDetail">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:id="@+id/topbar"
+        android:background="@color/colorPrimary">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="PO Detail"
+            android:id="@+id/title"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:gravity="center"
+            android:layout_toEndOf="@+id/back"/>
+        <ImageView
+            android:layout_width="54dp"
+            android:layout_height="match_parent"
+            android:padding="16dp"
+            android:src="@drawable/ic_back"
+            android:id="@+id/back"/>
+
+    </RelativeLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center_horizontal"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_below="@id/topbar">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -40,7 +40,7 @@ public class PoListAdapter extends RecyclerView.Adapter<PoListAdapter.myViewHold
     @Override
     public void onBindViewHolder(@NonNull myViewHolder holder, int position) {
         final PO_Info po_info =list.get(position);
-        holder.Amount.setText(po_info.getAmount());
+        holder.Amount.setText("₹"+po_info.getAmount());
         holder.date.setText(po_info.getPo_Date());
         holder.uid.setText(po_info.getPo_no());
         holder.item.setOnClickListener(new View.OnClickListener() {

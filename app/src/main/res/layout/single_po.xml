@@ -3,27 +3,27 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:id="@+id/item"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:padding="15dp">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/poAmount"
         android:text="POItem"
-        android:textSize="30sp"/>
+        android:textSize="30sp"
+        android:padding="5dp"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/poUID"
         android:text="UID"
+        android:padding="5dp"
         android:textSize="20sp"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/poDate"
         android:text="Date"
+        android:padding="5dp"
         android:textSize="20sp"/>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="4dp"
-        android:background="#f1f2f3"/>
 </LinearLayout>

@@ -3,18 +3,21 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:id="@+id/SingleDealer"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:padding="10dp">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:weightSum="5">
+        android:weightSum="5"
+        android:background="#ffff66">
     <TextView
         android:layout_width="0dp"
         android:layout_weight="4"
         android:layout_height="wrap_content"
         android:text="JH0001"
-        android:textSize="40sp"
+        android:textSize="30sp"
         android:id="@+id/dealerCode"
+        android:padding="10dp"
         />
     <TextView
         android:layout_width="0dp"
@@ -24,10 +27,7 @@
         android:background="#12ff56"
         android:id="@+id/pendingRequests"
         android:gravity="center"
-        android:textSize="40sp"/>
+        android:textSize="30sp"
+        android:padding="10dp"/>
     </LinearLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:background="#F1F2F3"/>
 </LinearLayout>

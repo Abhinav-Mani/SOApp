@@ -1,4 +1,4 @@
-package com.maxpetroleum.soapp;
+package com.maxpetroleum.soapp.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.maxpetroleum.soapp.Activity.DealerList;
+import com.maxpetroleum.soapp.R;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     Button dealer;

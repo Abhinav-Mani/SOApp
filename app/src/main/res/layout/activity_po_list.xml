@@ -7,7 +7,29 @@
     android:orientation="vertical"
     tools:context=".Activity.PoList">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:id="@+id/topbar"
+        android:background="@color/colorPrimary">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="PO List"
+            android:id="@+id/title"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:gravity="center"
+            android:layout_toEndOf="@+id/back"/>
+        <ImageView
+            android:layout_width="54dp"
+            android:layout_height="match_parent"
+            android:padding="16dp"
+            android:src="@drawable/ic_back"
+            android:id="@+id/back"/>
 
+    </RelativeLayout>
     <com.google.android.material.tabs.TabLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,9 +39,11 @@
         android:background="?attr/colorPrimary"
         app:tabMode="fixed"
         app:tabGravity="fill"
-        app:tabTextColor="#FFF"
-        app:tabSelectedTextColor="@color/colorAccent"
-        ></com.google.android.material.tabs.TabLayout>
+        app:tabTextColor="@color/colorPrimaryDark"
+        app:tabSelectedTextColor="@android:color/white"
+        app:tabIndicatorColor="@android:color/white"
+        />
+
 
     <androidx.viewpager.widget.ViewPager
         android:layout_width="match_parent"

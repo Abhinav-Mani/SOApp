@@ -16,8 +16,8 @@ import com.maxpetroleum.soapp.R;
 import java.util.ArrayList;
 
 public class DealerListAddapter extends RecyclerView.Adapter<DealerListAddapter.MyVieHolder>{
-    ArrayList<Dealer> list;
-    ClickHandler clickHandler;
+    private ArrayList<Dealer> list;
+    private ClickHandler clickHandler;
 
     public DealerListAddapter(ArrayList<Dealer> list, DealerList clickHandler) {
         this.list = list;

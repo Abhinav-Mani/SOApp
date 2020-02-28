@@ -1,16 +1,23 @@
 package com.maxpetroleum.soapp.Activity;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -20,11 +27,14 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.maxpetroleum.soapp.Fragments.AcceptedPOFragment;
+import com.maxpetroleum.soapp.Model.GradeInfo;
 import com.maxpetroleum.soapp.Model.PO_Info;
 import com.maxpetroleum.soapp.R;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Locale;
 
 public class PoDetail extends AppCompatActivity implements View.OnClickListener {
@@ -152,7 +162,10 @@ public class PoDetail extends AppCompatActivity implements View.OnClickListener 
         } else if(view==grades){
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
             dialog.setTitle("Grades");
-
+            ListView listView = new ListView(this);
+            QntAdapter adapter = new QntAdapter(this, po_info.getGrade());
+            listView.setAdapter(adapter);
+            dialog.setView(listView);
             dialog.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -160,6 +173,36 @@ public class PoDetail extends AppCompatActivity implements View.OnClickListener 
                 }
             });
             dialog.show();
+        }
+    }
+
+    static class QntAdapter extends ArrayAdapter<ArrayList<GradeInfo>> {
+        Context context; ArrayList<GradeInfo> grade;int flag;
+
+        QntAdapter(Context context, ArrayList<GradeInfo> grade){
+            super(context,R.layout.item_grades, Collections.singletonList(grade));
+            this.context = context;
+            this.grade = grade;
+        }
+
+        @Override
+        public int getCount() {
+            return grade.size();
+        }
+
+        @NonNull
+        @Override
+        public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+            LayoutInflater inflater = LayoutInflater.from(context);
+            View view = inflater.inflate(R.layout.item_grades,parent,false);
+            TextView gname = view.findViewById(R.id.gname);
+            TextView qnt = view.findViewById(R.id.qnt);
+            TextView amt = view.findViewById(R.id.amt);
+
+            gname.setText(grade.get(position).getGrade_name());
+            qnt.setText(grade.get(position).getQnty());
+            amt.setText("₹"+(Integer.parseInt(grade.get(position).getQnty())*Integer.parseInt(grade.get(position).getRate())));
+            return view;
         }
     }
 }
