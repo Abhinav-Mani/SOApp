@@ -1,0 +1,77 @@
+{
+  "project_info": {
+    "project_number": "860693764589",
+    "firebase_url": "https://makmanager-1aab7.firebaseio.com",
+    "project_id": "makmanager-1aab7",
+    "storage_bucket": "makmanager-1aab7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:860693764589:android:e6f01bf4aa911211912fe4",
+        "android_client_info": {
+          "package_name": "com.maxpetroleum.soapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "860693764589-9s3un4tpet3quiejn3nte3ga3hbnc6tg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.maxpetroleum.soapp",
+            "certificate_hash": "c330a061edb8dad1bfc6f21b2a1a4913d6baf257"
+          }
+        },
+        {
+          "client_id": "860693764589-phffocus0f4fhs13qclkeqj5po51diap.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBX5ppFAt1xjS0Vokb7PNwyB1AptvI9igA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "860693764589-phffocus0f4fhs13qclkeqj5po51diap.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:860693764589:android:64aa90a1e8144000912fe4",
+        "android_client_info": {
+          "package_name": "in.nitjsr.maxmanager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "860693764589-phffocus0f4fhs13qclkeqj5po51diap.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBX5ppFAt1xjS0Vokb7PNwyB1AptvI9igA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "860693764589-phffocus0f4fhs13qclkeqj5po51diap.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
