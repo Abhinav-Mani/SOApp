@@ -68,6 +68,7 @@ public class PoList extends AppCompatActivity implements PoListAdapter.ClickHand
         Intent intent=new Intent(this,PoDetail.class);
         intent.putExtra("Key",hashMap.get(po_info.getPo_no()));
         intent.putExtra("Data",po_info);
+        intent.putExtra("DealerUID",dealer.getUid());
         startActivity(intent);
     }
 

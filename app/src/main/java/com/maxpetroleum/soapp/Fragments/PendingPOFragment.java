@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -77,17 +78,13 @@ public class PendingPOFragment extends Fragment {
     }
 
     private void getMoreInfo(final String key) {
-        Log.d("hello", "getMoreInfo: "+key);
-        database.getReference("PO").child(key).addValueEventListener(new ValueEventListener() {
+        database.getReference("PO").child(PoList.dealer.getUid()).child(key).keepSynced(true);
+        database.getReference("PO").child(PoList.dealer.getUid()).child(key).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.d("hello", "data: "+dataSnapshot.getValue().toString());
-                Log.d("hello", "getMoreInfo: "+list.size());
-                PO_Info po_info=(PO_Info) dataSnapshot.getValue(PO_Info.class);
+                PO_Info po_info=dataSnapshot.getValue(PO_Info.class);
                 boolean found = false;
                 for(int i=0;i<list.size();i++){
-                    Log.d("hello", "getMoreInfo: after change"+i);
-
                     if(list.get(i).getPo_no().equalsIgnoreCase(po_info.getPo_no())){
                         list.get(i).setBill_date(po_info.getBill_date());
                         found=true;
@@ -100,9 +97,10 @@ public class PendingPOFragment extends Fragment {
                 }
                 if(!found)
                     list.add(po_info);
-                Log.d("hello", "getMoreInfo: after change"+list.size());
                 adapter.notifyDataSetChanged();
-                PoList.hashMap.put(po_info.getPo_no(),key);
+                if (po_info != null) {
+                    PoList.hashMap.put(po_info.getPo_no(),key);
+                }
             }
 
             @Override
@@ -115,6 +113,7 @@ public class PendingPOFragment extends Fragment {
         database= FirebaseDatabase.getInstance();
         Log.d("ak47", "init: "+PoList.dealer.getUid());
         myRef=database.getReference().child("Dealer").child(PoList.dealer.getUid());
+        myRef.keepSynced(true);
         recyclerView=view.findViewById(R.id.pendingRequestsPO);
         list=new ArrayList<>();
         adapter=new PoListAdapter(list,poList);

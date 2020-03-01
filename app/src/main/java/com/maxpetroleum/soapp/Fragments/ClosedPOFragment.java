@@ -52,7 +52,6 @@ public class ClosedPOFragment extends Fragment {
     }
 
     private void fetch() {
-        Log.d("ak47", "fetch: "+myRef.getPath());
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -73,7 +72,8 @@ public class ClosedPOFragment extends Fragment {
     }
 
     private void getMoreInfo(final String key) {
-        database.getReference("PO").child(key).addValueEventListener(new ValueEventListener() {
+        database.getReference("PO").child(PoList.dealer.getUid()).child(key).keepSynced(true);
+        database.getReference("PO").child(PoList.dealer.getUid()).child(key).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 PO_Info po_info=(PO_Info) dataSnapshot.getValue(PO_Info.class);
@@ -101,6 +101,7 @@ public class ClosedPOFragment extends Fragment {
         database= FirebaseDatabase.getInstance();
         Log.d("ak47", "init: "+PoList.dealer.getUid());
         myRef=database.getReference().child("Dealer").child(PoList.dealer.getUid());
+        myRef.keepSynced(true);
         recyclerView=view.findViewById(R.id.pendingRequestsPO);
         list=new ArrayList<>();
         adapter=new PoListAdapter(list,poList);

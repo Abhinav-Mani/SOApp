@@ -47,6 +47,7 @@ public class DealerList extends AppCompatActivity implements DealerListAddapter.
     }
 
     private void fetch() {
+        myRef.keepSynced(true);
         myRef.child(SOID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

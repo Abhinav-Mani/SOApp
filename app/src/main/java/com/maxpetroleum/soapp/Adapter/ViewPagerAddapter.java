@@ -22,10 +22,10 @@ public class ViewPagerAddapter extends FragmentPagerAdapter {
             case 0:
                 PendingPOFragment pendingPOFragment=new PendingPOFragment();
                 return pendingPOFragment;
-            case 1:
+            case 2:
                 ClosedPOFragment closedPOFragment=new ClosedPOFragment();
                 return closedPOFragment;
-            case 2:
+            case 1:
                 AcceptedPOFragment poFragment=new AcceptedPOFragment();
                 return poFragment;
         }
@@ -43,9 +43,9 @@ public class ViewPagerAddapter extends FragmentPagerAdapter {
         switch (position){
             case 0:
                 return "Pending";
-            case 1:
-                return "Closed";
             case 2:
+                return "Closed";
+            case 1:
                 return "Accepted";
         }
         return null;

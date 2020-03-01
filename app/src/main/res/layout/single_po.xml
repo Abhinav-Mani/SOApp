@@ -1,29 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:id="@+id/item"
     android:layout_height="wrap_content"
-    android:padding="15dp">
-    <TextView
+    android:padding="10dp"
+    android:layout_margin="10dp"
+    android:background="#ffff66">
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/poAmount"
-        android:text="POItem"
-        android:textSize="30sp"
-        android:padding="5dp"/>
-    <TextView
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="PO No. :"
+            android:textSize="15sp"
+            android:layout_gravity="center"
+            android:layout_weight="0.4"
+            android:layout_marginEnd="5dp"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            tools:text="here po no"
+            android:textSize="25sp"
+            android:id="@+id/poUID"
+            android:layout_weight="1"
+            android:textColor="@android:color/black"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/poUID"
-        android:text="UID"
-        android:padding="5dp"
-        android:textSize="20sp"/>
-    <TextView
+        android:orientation="horizontal"
+        android:gravity="center">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Amount:"
+            android:textSize="15sp"
+            android:layout_gravity="center"
+            android:layout_weight="0.5"
+            android:layout_marginEnd="5dp"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            tools:text="amount"
+            android:id="@+id/poAmount"
+            android:layout_weight="0.8"
+            android:textSize="20sp"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Date:"
+            android:textSize="15sp"
+            android:layout_weight="0.5"
+            android:layout_gravity="center"
+            android:layout_marginEnd="5dp"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:layout_weight="1"
+            tools:text="date"
+            android:id="@+id/poDate"/>
+    </LinearLayout>
+
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/poDate"
-        android:text="Date"
-        android:padding="5dp"
-        android:textSize="20sp"/>
+        android:layout_height="match_parent" />
+
+
 </LinearLayout>

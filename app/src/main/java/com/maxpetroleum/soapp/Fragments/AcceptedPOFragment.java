@@ -18,6 +18,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.maxpetroleum.soapp.Activity.LoginActivity;
 import com.maxpetroleum.soapp.Activity.PoList;
 import com.maxpetroleum.soapp.Adapter.PoListAdapter;
 import com.maxpetroleum.soapp.Model.PO_Info;
@@ -29,11 +30,11 @@ import java.util.ArrayList;
  * A simple {@link Fragment} subclass.
  */
 public class AcceptedPOFragment extends Fragment {
-    FirebaseDatabase database;
-    DatabaseReference myRef;
-    RecyclerView recyclerView;
-    ArrayList<PO_Info> list;
-    PoListAdapter adapter;
+    private FirebaseDatabase database;
+    private DatabaseReference myRef;
+    private RecyclerView recyclerView;
+    private ArrayList<PO_Info> list;
+    private PoListAdapter adapter;
     public AcceptedPOFragment() {
         // Required empty public constructor
     }
@@ -51,7 +52,6 @@ public class AcceptedPOFragment extends Fragment {
     }
 
     private void fetch() {
-        Log.d("ak47", "fetch: "+myRef.getPath());
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -72,7 +72,8 @@ public class AcceptedPOFragment extends Fragment {
     }
 
     private void getMoreInfo(final String key) {
-        database.getReference("PO").child(key).addValueEventListener(new ValueEventListener() {
+        database.getReference("PO").child(PoList.dealer.getUid()).child(key).keepSynced(true);
+        database.getReference("PO").child(PoList.dealer.getUid()).child(key).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 PO_Info po_info=(PO_Info) dataSnapshot.getValue(PO_Info.class);
@@ -100,6 +101,7 @@ public class AcceptedPOFragment extends Fragment {
         database= FirebaseDatabase.getInstance();
         Log.d("ak47", "init: "+PoList.dealer.getUid());
         myRef=database.getReference().child("Dealer").child(PoList.dealer.getUid());
+        myRef.keepSynced(true);
         recyclerView=view.findViewById(R.id.pendingRequestsPO);
         list=new ArrayList<>();
         adapter=new PoListAdapter(list,poList);
