@@ -78,8 +78,6 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         updatePasswordOnline(password);
-                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                        finish();
                     }
                 });
                 findViewById(R.id.change_password_button).setOnClickListener(new View.OnClickListener() {
@@ -145,7 +143,8 @@ public class LoginActivity extends AppCompatActivity {
                         uid = dataSnapshot.getValue().toString();
                         preferences.edit().putString("UID",uid).apply();
                         ref.child("UserData").child("Sales officer").child(uid).child("password").setValue(s);
-                        proceed(user);
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        finish();
                     }
 
                     @Override

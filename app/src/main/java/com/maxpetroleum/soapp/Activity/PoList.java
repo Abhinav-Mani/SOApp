@@ -6,6 +6,7 @@ import androidx.viewpager.widget.ViewPager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.Toast;
@@ -29,6 +30,7 @@ public class PoList extends AppCompatActivity implements PoListAdapter.ClickHand
     public static Dealer dealer;
     public static HashMap<String,String> hashMap;
     ImageView back;
+    Button addButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,10 +59,11 @@ public class PoList extends AppCompatActivity implements PoListAdapter.ClickHand
         tabLayout=findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
         back = findViewById(R.id.back);
+        addButton = findViewById(R.id.add_button);
 
         hashMap=new HashMap<>();
         back.setOnClickListener(this);
-
+        addButton.setOnClickListener(this);
     }
 
     @Override
@@ -75,5 +78,8 @@ public class PoList extends AppCompatActivity implements PoListAdapter.ClickHand
     @Override
     public void onClick(View v) {
         if(v == back) finish();
+        else if(v == addButton){
+
+        }
     }
 }

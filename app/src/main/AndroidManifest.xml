@@ -3,13 +3,14 @@
     package="com.maxpetroleum.soapp">
 
     <application
+        android:name=".Activity.SOApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:name=".Activity.SOApp"
         android:theme="@style/AppTheme">
+        <activity android:name=".Activity.AddPOs"></activity>
         <activity android:name=".Activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,8 +21,7 @@
         <activity android:name=".Activity.PoDetail" />
         <activity android:name=".Activity.DealerList" />
         <activity android:name=".Activity.PoList" />
-        <activity android:name=".Activity.MainActivity">
-        </activity>
+        <activity android:name=".Activity.MainActivity" />
     </application>
 
 </manifest>

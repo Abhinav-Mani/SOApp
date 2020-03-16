@@ -14,4 +14,13 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
+
+    <string-array name="grade_name">
+        <item>ENGINEOIL BPCL 800ML 5W30MA</item>
+        <item>ENGINEOIL BPCL 1000ML5W30MA</item>
+        <item>ENGINEOIL BPCL 900ML10W30MA</item>
+        <item>ENGINEOIL BPCL 1000ML10W30MA</item>
+        <item>ENGINEOIL BPCL 800ML10W30MA</item>
+        <item>ENGINEOIL BPCL 800ML10W30MB</item>
+    </string-array>
 </resources>
