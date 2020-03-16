@@ -91,19 +91,19 @@ public class AddPOs extends AppCompatActivity implements View.OnClickListener, A
         save.setOnClickListener(this);
     }
 
-    private void setEditData() {
-        PO_Info info = MainActivity.PO_DETAILS.get(edit_position);
-        date.setText(info.getPo_Date());
-        po_no.setText(info.getPo_no());
-        gradeInfo = info.getGrade();
-        QntAdapter adapter = new QntAdapter(this, info.getGrade(), EDIT_FLAG);
-        adapter.notifyDataSetChanged();
-        listView.setAdapter(adapter);
-        for (int i = 0; i < info.getGrade().size(); i++) {
-            net_amt += Integer.parseInt(gradeInfo.get(gradeInfo.size() - 1).getQnty()) * Integer.parseInt(gradeInfo.get(gradeInfo.size() - 1).getRate());
-        }
-        net_amt_tv.setText("Net Payable: ₹" + net_amt);
-    }
+//    private void setEditData() {
+//        PO_Info info = MainActivity.PO_DETAILS.get(edit_position);
+//        date.setText(info.getPo_Date());
+//        po_no.setText(info.getPo_no());
+//        gradeInfo = info.getGrade();
+//        QntAdapter adapter = new QntAdapter(this, info.getGrade(), EDIT_FLAG);
+//        adapter.notifyDataSetChanged();
+//        listView.setAdapter(adapter);
+//        for (int i = 0; i < info.getGrade().size(); i++) {
+//            net_amt += Integer.parseInt(gradeInfo.get(gradeInfo.size() - 1).getQnty()) * Integer.parseInt(gradeInfo.get(gradeInfo.size() - 1).getRate());
+//        }
+//        net_amt_tv.setText("Net Payable: ₹" + net_amt);
+//    }
 
     private void setDate() {
         final DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
@@ -161,13 +161,12 @@ public class AddPOs extends AppCompatActivity implements View.OnClickListener, A
             }
         } else if (v == back) finish();
         else if (v == save) {
-//            prepareDatalist();
+           prepareDatalist();
         }
     }
 
     private void prepareDatalist() {
-        String uid = getSharedPreferences(LoginActivity.SHAREDPREFS, MODE_PRIVATE).getString("UID", "");
-
+        String uid=PoList.dealer.getUid();
         if (date.getText().toString().isEmpty()) date.setError("Cannot be Empty");
         else if (po_no.getText().toString().isEmpty()) po_no.setError("Cannot be Empty");
         else if (gradeInfo.size() == 0)
@@ -176,17 +175,19 @@ public class AddPOs extends AppCompatActivity implements View.OnClickListener, A
             PO_Info po_info = new PO_Info(po_no.getText().toString(), net_amt + "", date.getText().toString(), gradeInfo);
 
             if (flag == EDIT_FLAG) {
-                DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("PO").child(uid);
-                ref.child(MainActivity.PO_ID.get(edit_position)).setValue(po_info);
-                Intent intent = new Intent(this, PoDetail.class);
-                intent.putExtra("position", position);
-                startActivity(intent);
-                finish();
+//                DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("PO").child(uid);
+//                ref.child(MainActivity.PO_ID.get(edit_position)).setValue(po_info);
+//                Intent intent = new Intent(this, PoDetail.class);
+//                intent.putExtra("position", position);
+//                startActivity(intent);
+//                finish();
             } else {
-                DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("PO").child(uid);
-                ref.push().setValue(po_info);
-                startActivity(new Intent(this, POList.class));
-                finish();
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+                String poid=ref.child("PO").child(uid).push().getKey();
+                ref.child("PO").child(uid).child(poid).setValue(po_info);
+                ref.child("Dealer").child(PoList.dealer.getUid()).child(poid).setValue("Pending");
+                //startActivity(new Intent(this, POList.class));
+               finish();
             }
         }
     }
@@ -195,13 +196,13 @@ public class AddPOs extends AppCompatActivity implements View.OnClickListener, A
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         String[] s = this.getResources().getStringArray(R.array.grade_name);
         grade_name = s[position];
-//        rate = MainActivity.GRADE_RATE.get(position);
+        rate = MainActivity.GRADE_RATE.get(position);
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
         grade_name = "";
-//        rate = MainActivity.GRADE_RATE.get(0);
+        rate = MainActivity.GRADE_RATE.get(0);
     }
 
     @Override

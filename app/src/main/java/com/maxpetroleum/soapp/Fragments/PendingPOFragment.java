@@ -84,15 +84,18 @@ public class PendingPOFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 PO_Info po_info=dataSnapshot.getValue(PO_Info.class);
                 boolean found = false;
-                for(int i=0;i<list.size();i++){
-                    if(list.get(i).getPo_no().equalsIgnoreCase(po_info.getPo_no())){
-                        list.get(i).setBill_date(po_info.getBill_date());
-                        found=true;
-                    }
-                    if(list.get(i).getBill_date()!=null){
-                        list.remove(i);
-                        found=true;
-                        Log.d("hello", "found");
+                if(po_info!=null) {
+                    for (int i = 0; i < list.size(); i++) {
+                        Log.d("mak", "onDataChange: " + list.get(i) + " " + po_info);
+                        if (list.get(i).getPo_no().equalsIgnoreCase(po_info.getPo_no())) {
+                            list.get(i).setBill_date(po_info.getBill_date());
+                            found = true;
+                        }
+                        if (list.get(i).getBill_date() != null) {
+                            list.remove(i);
+                            found = true;
+                            Log.d("hello", "found");
+                        }
                     }
                 }
                 if(!found)

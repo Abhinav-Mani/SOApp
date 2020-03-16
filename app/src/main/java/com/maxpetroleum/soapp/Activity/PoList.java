@@ -79,7 +79,10 @@ public class PoList extends AppCompatActivity implements PoListAdapter.ClickHand
     public void onClick(View v) {
         if(v == back) finish();
         else if(v == addButton){
-
+            Intent intent=new Intent(this,AddPOs.class);
+            intent.putExtra("DealerID",dealer.getUid());
+            intent.putExtra("flag",AddPOs.VIEW_FLAG);
+            startActivity(intent);
         }
     }
 }
