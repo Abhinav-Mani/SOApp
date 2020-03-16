@@ -91,19 +91,19 @@ public class AddPOs extends AppCompatActivity implements View.OnClickListener, A
         save.setOnClickListener(this);
     }
 
-//    private void setEditData() {
-//        PO_Info info = MainActivity.PO_DETAILS.get(edit_position);
-//        date.setText(info.getPo_Date());
-//        po_no.setText(info.getPo_no());
-//        gradeInfo = info.getGrade();
-//        QntAdapter adapter = new QntAdapter(this, info.getGrade(), EDIT_FLAG);
-//        adapter.notifyDataSetChanged();
-//        listView.setAdapter(adapter);
-//        for (int i = 0; i < info.getGrade().size(); i++) {
-//            net_amt += Integer.parseInt(gradeInfo.get(gradeInfo.size() - 1).getQnty()) * Integer.parseInt(gradeInfo.get(gradeInfo.size() - 1).getRate());
-//        }
-//        net_amt_tv.setText("Net Payable: ₹" + net_amt);
-//    }
+    private void setEditData() {
+        PO_Info info = MainActivity.PO_DETAILS.get(edit_position);
+        date.setText(info.getPo_Date());
+        po_no.setText(info.getPo_no());
+        gradeInfo = info.getGrade();
+        QntAdapter adapter = new QntAdapter(this, info.getGrade(), EDIT_FLAG);
+        adapter.notifyDataSetChanged();
+        listView.setAdapter(adapter);
+        for (int i = 0; i < info.getGrade().size(); i++) {
+            net_amt += Integer.parseInt(gradeInfo.get(gradeInfo.size() - 1).getQnty()) * Integer.parseInt(gradeInfo.get(gradeInfo.size() - 1).getRate());
+        }
+        net_amt_tv.setText("Net Payable: ₹" + net_amt);
+    }
 
     private void setDate() {
         final DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
@@ -165,31 +165,31 @@ public class AddPOs extends AppCompatActivity implements View.OnClickListener, A
         }
     }
 
-//    private void prepareDatalist() {
-//        String uid = getSharedPreferences(LoginActivity.SHAREDPREFS, MODE_PRIVATE).getString("UID", "");
-//
-//        if (date.getText().toString().isEmpty()) date.setError("Cannot be Empty");
-//        else if (po_no.getText().toString().isEmpty()) po_no.setError("Cannot be Empty");
-//        else if (gradeInfo.size() == 0)
-//            Toast.makeText(this, "Enter grade", Toast.LENGTH_SHORT).show();
-//        else {
-//            PO_Info po_info = new PO_Info(po_no.getText().toString(), net_amt + "", date.getText().toString(), gradeInfo);
-//
-//            if (flag == EDIT_FLAG) {
-//                DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(FIREBASE_PO).child(uid);
-//                ref.child(MainActivity.PO_ID.get(edit_position)).setValue(po_info);
-//                Intent intent = new Intent(this, PoDetail.class);
-//                intent.putExtra("position", position);
-//                startActivity(intent);
-//                finish();
-//            } else {
-//                DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(FIREBASE_PO).child(uid);
-//                ref.push().setValue(po_info);
-//                startActivity(new Intent(this, POList.class));
-//                finish();
-//            }
-//        }
-//    }
+    private void prepareDatalist() {
+        String uid = getSharedPreferences(LoginActivity.SHAREDPREFS, MODE_PRIVATE).getString("UID", "");
+
+        if (date.getText().toString().isEmpty()) date.setError("Cannot be Empty");
+        else if (po_no.getText().toString().isEmpty()) po_no.setError("Cannot be Empty");
+        else if (gradeInfo.size() == 0)
+            Toast.makeText(this, "Enter grade", Toast.LENGTH_SHORT).show();
+        else {
+            PO_Info po_info = new PO_Info(po_no.getText().toString(), net_amt + "", date.getText().toString(), gradeInfo);
+
+            if (flag == EDIT_FLAG) {
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("PO").child(uid);
+                ref.child(MainActivity.PO_ID.get(edit_position)).setValue(po_info);
+                Intent intent = new Intent(this, PoDetail.class);
+                intent.putExtra("position", position);
+                startActivity(intent);
+                finish();
+            } else {
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("PO").child(uid);
+                ref.push().setValue(po_info);
+                startActivity(new Intent(this, POList.class));
+                finish();
+            }
+        }
+    }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -227,33 +227,33 @@ public class AddPOs extends AppCompatActivity implements View.OnClickListener, A
             return grade.size();
         }
 
-//        @NonNull
-//        @Override
-//        public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-//            LayoutInflater inflater = LayoutInflater.from(context);
-//            View view = inflater.inflate(R.layout.item_grades, parent, false);
-//            TextView gname = view.findViewById(R.id.gname);
-//            TextView qnt = view.findViewById(R.id.qnt);
-//            TextView amt = view.findViewById(R.id.amt);
-//            ImageView iv = view.findViewById(R.id.delete);
-//
-//            if (flag == EDIT_FLAG) {
-//                iv.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        AddPOs.net_amt -= Integer.parseInt(grade.get(position).getQnty()) * Integer.parseInt(grade.get(position).getRate());
-//                        grade.remove(position);
-//                        net_amt_tv.setText("Net Payable: ₹" + net_amt);
-//                        notifyDataSetChanged();
-//                    }
-//                });
-//            } else if (flag == VIEW_FLAG) {
-//                iv.setVisibility(View.GONE);
-//            }
-//            gname.setText(grade.get(position).getGrade_name());
-//            qnt.setText(grade.get(position).getQnty());
-//            amt.setText("₹" + (Integer.parseInt(grade.get(position).getQnty()) * Integer.parseInt(grade.get(position).getRate())));
-//            return view;
-//        }
+        @NonNull
+        @Override
+        public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+            LayoutInflater inflater = LayoutInflater.from(context);
+            View view = inflater.inflate(R.layout.item_grades, parent, false);
+            TextView gname = view.findViewById(R.id.gname);
+            TextView qnt = view.findViewById(R.id.qnt);
+            TextView amt = view.findViewById(R.id.amt);
+            ImageView iv = view.findViewById(R.id.delete);
+
+            if (flag == EDIT_FLAG) {
+                iv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        AddPOs.net_amt -= Integer.parseInt(grade.get(position).getQnty()) * Integer.parseInt(grade.get(position).getRate());
+                        grade.remove(position);
+                        net_amt_tv.setText("Net Payable: ₹" + net_amt);
+                        notifyDataSetChanged();
+                    }
+                });
+            } else if (flag == VIEW_FLAG) {
+                iv.setVisibility(View.GONE);
+            }
+            gname.setText(grade.get(position).getGrade_name());
+            qnt.setText(grade.get(position).getQnty());
+            amt.setText("₹" + (Integer.parseInt(grade.get(position).getQnty()) * Integer.parseInt(grade.get(position).getRate())));
+            return view;
+        }
     }
 }

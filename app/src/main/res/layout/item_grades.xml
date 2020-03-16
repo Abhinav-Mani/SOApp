@@ -55,5 +55,13 @@
                 android:id="@+id/amt"/>
         </LinearLayout>
     </LinearLayout>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_close"
+        android:layout_gravity="center"
+        android:padding="5dp"
+        android:tint="@android:color/holo_purple"
+        android:id="@+id/delete"/>
 
 </LinearLayout>
