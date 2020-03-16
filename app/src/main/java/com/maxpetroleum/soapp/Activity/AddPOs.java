@@ -161,7 +161,7 @@ public class AddPOs extends AppCompatActivity implements View.OnClickListener, A
             }
         } else if (v == back) finish();
         else if (v == save) {
-//            prepareDatalist();
+            prepareDatalist();
         }
     }
 
