@@ -43,7 +43,7 @@ public class PoListAdapter extends RecyclerView.Adapter<PoListAdapter.myViewHold
         holder.Amount.setText("₹"+po_info.getAmount());
         holder.date.setText(po_info.getPo_Date());
         holder.uid.setText(po_info.getPo_no());
-        holder.item.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 clickHandler.onItemClicked(po_info);
@@ -58,13 +58,11 @@ public class PoListAdapter extends RecyclerView.Adapter<PoListAdapter.myViewHold
 
     public static class myViewHolder extends RecyclerView.ViewHolder {
         TextView Amount,date,uid;
-        LinearLayout item;
         public myViewHolder(@NonNull View itemView) {
             super(itemView);
             Amount=itemView.findViewById(R.id.poAmount);
             date=itemView.findViewById(R.id.poDate);
             uid=itemView.findViewById(R.id.poUID);
-            item=itemView.findViewById(R.id.item);
         }
     }
 }

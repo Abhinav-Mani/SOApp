@@ -38,6 +38,7 @@ import java.util.Locale;
 public class PoDetail extends AppCompatActivity implements View.OnClickListener {
     PO_Info po_info;
     String key;
+    String DealerUID;
     EditText select_date;
     TextView status,po_no,amount,poDate,deliveryDate,billDate,paymentDate;
     Button Accept,Decline;
@@ -48,6 +49,7 @@ public class PoDetail extends AppCompatActivity implements View.OnClickListener 
     String bill_Date;
     LinearLayout contols;
     Button grades;
+    ImageView back;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +80,23 @@ public class PoDetail extends AppCompatActivity implements View.OnClickListener 
         paymentDate.setText(po_info.getPayment_date());
         if(po_info.getBill_date()!=null){
             contols.setVisibility(View.GONE);
+        }
+
+        if(po_info.getPayment_date() == null){
+            status.setText("Pending\nPayment Date");
+            status.setTextColor(getResources().getColor(android.R.color.holo_red_dark));
+        }
+        else if(po_info.getBill_date() == null){
+            status.setText("Pending\nBill Date");
+            status.setTextColor(getResources().getColor(android.R.color.holo_red_light));
+        }
+        else if(po_info.getDelivery_date() == null){
+            status.setText("Pending\nDelivery Date");
+            status.setTextColor(getResources().getColor(android.R.color.holo_red_light));
+        }
+        else if(po_info.getDelivery_date() != null){
+            status.setText("Deal Closed");
+            status.setTextColor(getResources().getColor(android.R.color.holo_green_dark));
         }
     }
 
@@ -127,6 +146,13 @@ public class PoDetail extends AppCompatActivity implements View.OnClickListener 
         Accept=findViewById(R.id.send_button);
 
         contols=findViewById(R.id.control);
+
+        findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void check() {
@@ -134,7 +160,7 @@ public class PoDetail extends AppCompatActivity implements View.OnClickListener 
         if(intent.hasExtra("Key")&&intent.hasExtra("Data")){
             po_info=(PO_Info) intent.getSerializableExtra("Data");
             key=intent.getStringExtra("Key");
-
+            DealerUID = intent.getStringExtra("DealerUID");
         }
         else {
             finish();
@@ -150,7 +176,7 @@ public class PoDetail extends AppCompatActivity implements View.OnClickListener 
             }
             po_info.setBill_date(bill_Date);
             myRef.child("Dealer").child(PoList.dealer.getUid()).child(key).setValue("Accepted");
-            myRef.child("PO").child(key).setValue(po_info).addOnSuccessListener(new OnSuccessListener<Void>() {
+            myRef.child("PO").child(DealerUID).child(key).setValue(po_info).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
                     billDate.setText(bill_Date);

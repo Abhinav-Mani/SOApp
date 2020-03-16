@@ -78,8 +78,6 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         updatePasswordOnline(password);
-                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                        finish();
                     }
                 });
                 findViewById(R.id.change_password_button).setOnClickListener(new View.OnClickListener() {
@@ -122,7 +120,6 @@ public class LoginActivity extends AppCompatActivity {
                                     if (task.isSuccessful()) {
                                         Toast.makeText(LoginActivity.this, "Password updated", Toast.LENGTH_SHORT).show();
                                         updatePasswordOnline(s);
-                                        proceed(user);
                                     } else {
                                         Toast.makeText(LoginActivity.this, "Error updating password", Toast.LENGTH_SHORT).show();
                                     }
@@ -134,8 +131,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void updatePasswordOnline(final String s) {
+        final FirebaseUser user = auth.getCurrentUser();
         String temp = preferences.getString("email","");
         final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+        ref.keepSynced(true);
         ref.child("User").child("Sales officer").child(temp)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -144,6 +143,8 @@ public class LoginActivity extends AppCompatActivity {
                         uid = dataSnapshot.getValue().toString();
                         preferences.edit().putString("UID",uid).apply();
                         ref.child("UserData").child("Sales officer").child(uid).child("password").setValue(s);
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        finish();
                     }
 
                     @Override
