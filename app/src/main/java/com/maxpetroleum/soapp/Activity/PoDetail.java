@@ -42,7 +42,7 @@ public class PoDetail extends AppCompatActivity implements View.OnClickListener 
     String DealerUID;
     EditText select_date;
     TextView status,po_no,amount,poDate,deliveryDate,billDate,paymentDate;
-    Button Accept,Decline;
+    Button Accept,Decline,edit;
     final Calendar myCalendar = Calendar.getInstance();
     boolean dateSet;
     FirebaseDatabase database;
@@ -70,6 +70,7 @@ public class PoDetail extends AppCompatActivity implements View.OnClickListener 
     private void setListners() {
         Accept.setOnClickListener(this);
         grades.setOnClickListener(this);
+        edit.setOnClickListener(this);
     }
 
     private void setValues() {
@@ -130,6 +131,7 @@ public class PoDetail extends AppCompatActivity implements View.OnClickListener 
     }
 
     private void init() {
+        edit=findViewById(R.id.edit);
         dateSet=false;
         database=FirebaseDatabase.getInstance();
         myRef=database.getReference();
@@ -198,6 +200,12 @@ public class PoDetail extends AppCompatActivity implements View.OnClickListener 
                 }
             });
             dialog.show();
+        }else if(view==edit){
+            Intent intent=new Intent(this,AddPOs.class);
+            intent.putExtra("flag",AddPOs.EDIT_FLAG);
+            intent.putExtra("Data",po_info);
+            intent.putExtra("Key",key);
+            startActivity(intent);
         }
     }
 

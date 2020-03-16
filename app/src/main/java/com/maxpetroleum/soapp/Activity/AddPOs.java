@@ -22,6 +22,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.maxpetroleum.soapp.Model.GradeInfo;
@@ -54,6 +55,7 @@ public class AddPOs extends AppCompatActivity implements View.OnClickListener, A
     ImageView back;
     int flag, edit_position;
     String rate;
+    String POUID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +84,7 @@ public class AddPOs extends AppCompatActivity implements View.OnClickListener, A
         flag = getIntent().getIntExtra("flag", 0);
         edit_position = getIntent().getIntExtra("position", 0);
         if (flag == EDIT_FLAG) {
-//            setEditData();
+            setEditData();
         }
 
         back.setOnClickListener(this);
@@ -91,19 +93,23 @@ public class AddPOs extends AppCompatActivity implements View.OnClickListener, A
         save.setOnClickListener(this);
     }
 
-//    private void setEditData() {
-//        PO_Info info = MainActivity.PO_DETAILS.get(edit_position);
-//        date.setText(info.getPo_Date());
-//        po_no.setText(info.getPo_no());
-//        gradeInfo = info.getGrade();
-//        QntAdapter adapter = new QntAdapter(this, info.getGrade(), EDIT_FLAG);
-//        adapter.notifyDataSetChanged();
-//        listView.setAdapter(adapter);
-//        for (int i = 0; i < info.getGrade().size(); i++) {
-//            net_amt += Integer.parseInt(gradeInfo.get(gradeInfo.size() - 1).getQnty()) * Integer.parseInt(gradeInfo.get(gradeInfo.size() - 1).getRate());
-//        }
-//        net_amt_tv.setText("Net Payable: ₹" + net_amt);
-//    }
+    private void setEditData() {
+        Intent intent=getIntent();
+        if(!intent.hasExtra("Data")||!intent.hasExtra("Key"))
+            return;
+        PO_Info info =(PO_Info)intent.getSerializableExtra("Data");
+        POUID=intent.getStringExtra("Key");
+        date.setText(info.getPo_Date());
+        po_no.setText(info.getPo_no());
+        gradeInfo = info.getGrade();
+        QntAdapter adapter = new QntAdapter(this, info.getGrade(), EDIT_FLAG);
+        adapter.notifyDataSetChanged();
+        listView.setAdapter(adapter);
+        for (int i = 0; i < info.getGrade().size(); i++) {
+            net_amt += Integer.parseInt(gradeInfo.get(gradeInfo.size() - 1).getQnty()) * Integer.parseInt(gradeInfo.get(gradeInfo.size() - 1).getRate());
+        }
+        net_amt_tv.setText("Net Payable: ₹" + net_amt);
+    }
 
     private void setDate() {
         final DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
@@ -175,7 +181,15 @@ public class AddPOs extends AppCompatActivity implements View.OnClickListener, A
             PO_Info po_info = new PO_Info(po_no.getText().toString(), net_amt + "", date.getText().toString(), gradeInfo);
 
             if (flag == EDIT_FLAG) {
-//                DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("PO").child(uid);
+               DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("PO").child(PoList.dealer.getUid()).child(POUID);
+               ref.setValue(po_info).addOnSuccessListener(new OnSuccessListener<Void>() {
+                   @Override
+                   public void onSuccess(Void aVoid) {
+                       Toast.makeText(AddPOs.this,"Updated",Toast.LENGTH_LONG).show();
+                       finish();
+                   }
+               });
+
 //                ref.child(MainActivity.PO_ID.get(edit_position)).setValue(po_info);
 //                Intent intent = new Intent(this, PoDetail.class);
 //                intent.putExtra("position", position);
