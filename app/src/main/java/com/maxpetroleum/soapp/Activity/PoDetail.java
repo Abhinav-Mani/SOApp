@@ -51,6 +51,11 @@ public class PoDetail extends AppCompatActivity implements View.OnClickListener 
     LinearLayout contols;
     Button grades;
     ImageView back;
+    int whichDate;
+    static int PAYMENT_DATE = 150;
+    static int BILL_DATE = 151;
+    static int DELIVERY_DATE = 152;
+    String balance;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,7 +85,21 @@ public class PoDetail extends AppCompatActivity implements View.OnClickListener 
         deliveryDate.setText(po_info.getDelivery_date());
         billDate.setText(po_info.getBill_date());
         paymentDate.setText(po_info.getPayment_date());
-        if(po_info.getBill_date()!=null){
+
+        if(po_info.getPayment_date() == null){
+            contols.setVisibility(View.VISIBLE);
+            select_date.setHint("Select Payment Date");
+            whichDate = PAYMENT_DATE;
+        }
+        else if(po_info.getBill_date()==null){
+            select_date.setHint("Select Bill Date");
+            whichDate = BILL_DATE;
+        }
+        else if(po_info.getDelivery_date()==null){
+            select_date.setHint("Select Delivery Date");
+            whichDate = DELIVERY_DATE;
+        }
+        else if(po_info.getDelivery_date() != null){
             contols.setVisibility(View.GONE);
         }
 
@@ -156,6 +175,10 @@ public class PoDetail extends AppCompatActivity implements View.OnClickListener 
                 finish();
             }
         });
+
+        if(po_info.getPayment_date()!=null){
+            edit.setVisibility(View.GONE);
+        }
     }
 
     private void check() {
@@ -177,16 +200,35 @@ public class PoDetail extends AppCompatActivity implements View.OnClickListener 
                 Toast.makeText(this,"Set the Date",Toast.LENGTH_SHORT).show();
                 return;
             }
-            po_info.setBill_date(bill_Date);
-            myRef.child("Dealer").child(PoList.dealer.getUid()).child(key).setValue("Accepted");
-            myRef.child("PO").child(DealerUID).child(key).setValue(po_info).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    billDate.setText(bill_Date);
-                    contols.setVisibility(View.GONE);
-                }
-            });
-        } else if(view==grades){
+            if(whichDate == PAYMENT_DATE){
+                po_info.setPayment_date(bill_Date);
+                paymentDate.setText(bill_Date);
+                select_date.setHint("Select Bill Date");
+                whichDate = BILL_DATE;
+                edit.setVisibility(View.GONE);
+
+            }
+            else if(whichDate == BILL_DATE){
+                po_info.setBill_date(bill_Date);
+                myRef.child("Dealer").child(PoList.dealer.getUid()).child(key).setValue("Accepted");
+                billDate.setText(bill_Date);
+                select_date.setHint("Select Delivery Date");
+                whichDate = DELIVERY_DATE;
+                edit.setVisibility(View.GONE);
+
+            }
+            else if(whichDate == DELIVERY_DATE){
+                po_info.setDelivery_date(bill_Date);
+                myRef.child("Dealer").child(PoList.dealer.getUid()).child(key).setValue("Closed");
+                deliveryDate.setText(bill_Date);
+                contols.setVisibility(View.GONE);
+                edit.setVisibility(View.GONE);
+
+            }
+            myRef.child("PO").child(DealerUID).child(key).setValue(po_info);
+            select_date.setText("");
+        }
+        else if(view==grades){
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
             dialog.setTitle("Grades");
             ListView listView = new ListView(this);
@@ -231,6 +273,7 @@ public class PoDetail extends AppCompatActivity implements View.OnClickListener 
             TextView gname = view.findViewById(R.id.gname);
             TextView qnt = view.findViewById(R.id.qnt);
             TextView amt = view.findViewById(R.id.amt);
+
 
             gname.setText(grade.get(position).getGrade_name());
             qnt.setText(grade.get(position).getQnty());
