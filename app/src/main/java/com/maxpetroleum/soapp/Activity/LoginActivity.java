@@ -55,6 +55,13 @@ public class LoginActivity extends AppCompatActivity {
         FirebaseUser user = auth.getCurrentUser();
         proceed(user);
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        updatePasswordOnline(password);
+    }
+
     public void proceed(FirebaseUser user){
         String text;
         text = preferences.getString("email","");

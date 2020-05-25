@@ -41,7 +41,7 @@ public class AddPOs extends AppCompatActivity implements View.OnClickListener, A
     final static String TASKS = "poList";
     public static int EDIT_FLAG = 1001;
     public static int VIEW_FLAG = 1002;
-    static long net_amt;
+    static double net_amt;
     static TextView net_amt_tv;
     static int position;
     final Calendar myCalendar = Calendar.getInstance();
@@ -81,6 +81,7 @@ public class AddPOs extends AppCompatActivity implements View.OnClickListener, A
         gradeInfo = new ArrayList<>();
 
         position = 0;
+        setSpinnerList();
         flag = getIntent().getIntExtra("flag", 0);
         edit_position = getIntent().getIntExtra("position", 0);
         if (flag == EDIT_FLAG) {
@@ -91,6 +92,10 @@ public class AddPOs extends AppCompatActivity implements View.OnClickListener, A
         grade.setOnItemSelectedListener(this);
         add.setOnClickListener(this);
         save.setOnClickListener(this);
+    }
+    private void setSpinnerList() {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_dropdown_item,MainActivity.GRADE_NAME);
+        grade.setAdapter(adapter);
     }
 
     private void setEditData() {
@@ -106,7 +111,7 @@ public class AddPOs extends AppCompatActivity implements View.OnClickListener, A
         adapter.notifyDataSetChanged();
         listView.setAdapter(adapter);
         for (int i = 0; i < info.getGrade().size(); i++) {
-            net_amt += Integer.parseInt(gradeInfo.get(gradeInfo.size() - 1).getQnty()) * Integer.parseInt(gradeInfo.get(gradeInfo.size() - 1).getRate());
+            net_amt += Double.parseDouble(gradeInfo.get(gradeInfo.size() - 1).getQnty()) * Double.parseDouble(gradeInfo.get(gradeInfo.size() - 1).getRate());
         }
         net_amt_tv.setText("Net Payable: ₹" + net_amt);
     }
@@ -160,7 +165,7 @@ public class AddPOs extends AppCompatActivity implements View.OnClickListener, A
             qnt.setEnabled(true);
             if (!qnt.getText().toString().isEmpty() && !grade_name.isEmpty()) {
                 setQntList();
-                net_amt += Integer.parseInt(gradeInfo.get(gradeInfo.size() - 1).getQnty()) * Integer.parseInt(gradeInfo.get(gradeInfo.size() - 1).getRate());
+                net_amt += Double.parseDouble(gradeInfo.get(gradeInfo.size() - 1).getQnty()) * Double.parseDouble(gradeInfo.get(gradeInfo.size() - 1).getRate());
                 net_amt_tv.setText("Net Payable: ₹" + net_amt);
             } else {
                 qnt.setError("Empty");
@@ -209,7 +214,7 @@ public class AddPOs extends AppCompatActivity implements View.OnClickListener, A
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         String[] s = this.getResources().getStringArray(R.array.grade_name);
-        grade_name = s[position];
+        grade_name = MainActivity.GRADE_NAME.get(position);
         rate = MainActivity.GRADE_RATE.get(position);
     }
 
@@ -256,8 +261,12 @@ public class AddPOs extends AppCompatActivity implements View.OnClickListener, A
                 iv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        AddPOs.net_amt -= Integer.parseInt(grade.get(position).getQnty()) * Integer.parseInt(grade.get(position).getRate());
+//                        AddPOs.net_amt -= Double.parseDouble(grade.get(position).getQnty()) * Double.parseDouble(grade.get(position).getRate());
                         grade.remove(position);
+                        net_amt = 0.0;
+                        for (int i = 0; i < grade.size(); i++) {
+                            net_amt += Double.parseDouble(grade.get(grade.size() - 1).getQnty()) * Double.parseDouble(grade.get(grade.size() - 1).getRate());
+                        }
                         net_amt_tv.setText("Net Payable: ₹" + net_amt);
                         notifyDataSetChanged();
                     }
@@ -267,7 +276,7 @@ public class AddPOs extends AppCompatActivity implements View.OnClickListener, A
             }
             gname.setText(grade.get(position).getGrade_name());
             qnt.setText(grade.get(position).getQnty());
-            amt.setText("₹" + (Integer.parseInt(grade.get(position).getQnty()) * Integer.parseInt(grade.get(position).getRate())));
+            amt.setText("₹" + (Double.parseDouble(grade.get(position).getQnty()) * Double.parseDouble(grade.get(position).getRate())));
             return view;
         }
     }

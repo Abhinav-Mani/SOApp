@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,9 +24,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.maxpetroleum.soapp.Model.GradeInfo;
 import com.maxpetroleum.soapp.Model.PO_Info;
 import com.maxpetroleum.soapp.R;
@@ -55,7 +58,9 @@ public class PoDetail extends AppCompatActivity implements View.OnClickListener 
     static int PAYMENT_DATE = 150;
     static int BILL_DATE = 151;
     static int DELIVERY_DATE = 152;
-    String balance;
+    double balance;
+
+    ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,7 +70,9 @@ public class PoDetail extends AppCompatActivity implements View.OnClickListener 
 
         init();
 
-        setValues();
+        getPoInfo();
+
+        getDealerBalance();
 
         setDate();
 
@@ -78,6 +85,44 @@ public class PoDetail extends AppCompatActivity implements View.OnClickListener 
         edit.setOnClickListener(this);
     }
 
+    private void getPoInfo(){
+        progressDialog.show();
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("PO").child(DealerUID).child(key);
+        ref.keepSynced(true);
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                po_info = dataSnapshot.getValue(PO_Info.class);
+                progressDialog.dismiss();
+                setValues();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(PoDetail.this, "Error loading data", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        });
+    }
+
+    private void getDealerBalance(){
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("UserData").child("Dealer").child(DealerUID).child("balance");
+        ref.keepSynced(true);
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    balance = Double.parseDouble(dataSnapshot.getValue().toString());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     private void setValues() {
         po_no.setText(po_info.getPo_no());
         amount.setText("₹"+po_info.getAmount());
@@ -85,6 +130,10 @@ public class PoDetail extends AppCompatActivity implements View.OnClickListener 
         deliveryDate.setText(po_info.getDelivery_date());
         billDate.setText(po_info.getBill_date());
         paymentDate.setText(po_info.getPayment_date());
+
+        if(po_info.getPayment_date()!=null){
+            edit.setVisibility(View.GONE);
+        }
 
         if(po_info.getPayment_date() == null){
             contols.setVisibility(View.VISIBLE);
@@ -169,22 +218,21 @@ public class PoDetail extends AppCompatActivity implements View.OnClickListener 
 
         contols=findViewById(R.id.control);
 
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setCancelable(false);
+
         findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
-
-        if(po_info.getPayment_date()!=null){
-            edit.setVisibility(View.GONE);
-        }
     }
 
     private void check() {
         Intent intent=getIntent();
-        if(intent.hasExtra("Key")&&intent.hasExtra("Data")){
-            po_info=(PO_Info) intent.getSerializableExtra("Data");
+        if(intent.hasExtra("Key")&&intent.hasExtra("DealerUID")){
+//            po_info=(PO_Info) intent.getSerializableExtra("Data");
             key=intent.getStringExtra("Key");
             DealerUID = intent.getStringExtra("DealerUID");
         }
@@ -202,28 +250,21 @@ public class PoDetail extends AppCompatActivity implements View.OnClickListener 
             }
             if(whichDate == PAYMENT_DATE){
                 po_info.setPayment_date(bill_Date);
-                paymentDate.setText(bill_Date);
-                select_date.setHint("Select Bill Date");
-                whichDate = BILL_DATE;
-                edit.setVisibility(View.GONE);
+                balance-=Double.parseDouble(po_info.getAmount());
+                myRef.child("UserData").child("Dealer").child(DealerUID).child("balance").setValue(balance);
+                setValues();
 
             }
             else if(whichDate == BILL_DATE){
                 po_info.setBill_date(bill_Date);
                 myRef.child("Dealer").child(PoList.dealer.getUid()).child(key).setValue("Accepted");
-                billDate.setText(bill_Date);
-                select_date.setHint("Select Delivery Date");
-                whichDate = DELIVERY_DATE;
-                edit.setVisibility(View.GONE);
+                setValues();
 
             }
             else if(whichDate == DELIVERY_DATE){
                 po_info.setDelivery_date(bill_Date);
                 myRef.child("Dealer").child(PoList.dealer.getUid()).child(key).setValue("Closed");
-                deliveryDate.setText(bill_Date);
-                contols.setVisibility(View.GONE);
-                edit.setVisibility(View.GONE);
-
+                setValues();
             }
             myRef.child("PO").child(DealerUID).child(key).setValue(po_info);
             select_date.setText("");
@@ -277,7 +318,7 @@ public class PoDetail extends AppCompatActivity implements View.OnClickListener 
 
             gname.setText(grade.get(position).getGrade_name());
             qnt.setText(grade.get(position).getQnty());
-            amt.setText("₹"+(Integer.parseInt(grade.get(position).getQnty())*Integer.parseInt(grade.get(position).getRate())));
+            amt.setText("₹"+(Double.parseDouble(grade.get(position).getQnty())*Double.parseDouble(grade.get(position).getRate())));
             return view;
         }
     }
